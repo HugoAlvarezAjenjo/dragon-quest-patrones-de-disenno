@@ -58,6 +58,13 @@ Además, te piden un nuevo tipo: "CRÍTICO", con fórmula `daño * 1.5` y 20% de
 
 **Pista:** Cada tipo de ataque (NORMAL, SPECIAL, STATUS) tiene una fórmula distinta.
 
+**Solución:**
+
+- Aplicar el patrón **Strategy** para encapsular las diferentes fórmulas de daño en el paquete `domain.attack_strategies`.
+- El enum `AttackType` actúa como un registro de estrategias, asociando cada tipo con su implementación correspondiente.
+- El `CombatEngine` se ha simplificado al máximo, delegando el cálculo al tipo de ataque: `attack.getType().getStrategy().calculate(...)`.
+- **Nota sobre STATUS:** El refactor ha revelado un bug oculto: los ataques de estado hacían un daño masivo e ignoraban la defensa. Tras aplicar el patrón, se ha corregido para que hagan 0 de daño directo como se indica en el enunciado (a falta de un sistema de efectos de estado).
+
 ---
 
 ### 3. Crear personajes con muchas estadísticas
