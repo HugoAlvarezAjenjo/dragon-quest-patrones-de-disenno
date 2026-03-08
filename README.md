@@ -84,6 +84,12 @@ Ahora necesitas soportar: equipamiento, buffos temporales, clase (guerrero/mago)
 
 **Pista:** Mira cómo se crean los personajes en `BattleService` y en el endpoint `/start/external`.
 
+**Solución:**
+
+- Aplicar el patrón **Builder** mediante una clase builder..
+- Esto permite una construcción semántica y legible: `new Character.Builder("Héroe").maxHp(150).attack(25)...build()`.
+- Se evitan errores al intercambiar parámetros del mismo tipo y se facilita la evolución de la clase al añadir nuevas estadísticas opcionales sin romper constructores existentes.
+
 ---
 
 ### 4. Un único almacén de batallas
