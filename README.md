@@ -37,6 +37,13 @@ src/main/java/com/taller/patrones/
 
 **Pista:** Busca en `infrastructure/combat/CombatEngine.java`
 
+**Solución:** 
+
+- Usar Una factoria para añadir cohesion quitando de Comback engine la responsabilidad de crear ataques
+- Usar un catalogo para almacenar los ataques porque soy un poco loco de los enumerados 🙂 para:
+    - Similitud aunque inecesario patron Flyweight
+    - Aumentar el tipado para que no se pueda crear un ataque con un nombre que no existe y sea mas semantico a la hora de crear nuevos ataques.
+
 ---
 
 ### 2. Añadir una nueva fórmula de daño
