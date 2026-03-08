@@ -1,4 +1,4 @@
-package com.taller.patrones.domain;
+package com.taller.patrones.domain.attack;
 
 /**
  * Catálogo de ataques disponibles en el juego.

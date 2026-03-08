@@ -1,7 +1,7 @@
-package com.taller.patrones.domain.attack_strategies;
+package com.taller.patrones.domain.attack.strategies;
 
-import com.taller.patrones.domain.Attack;
 import com.taller.patrones.domain.Character;
+import com.taller.patrones.domain.attack.Attack;
 
 /**
  * Estrategia para el cálculo de daño.

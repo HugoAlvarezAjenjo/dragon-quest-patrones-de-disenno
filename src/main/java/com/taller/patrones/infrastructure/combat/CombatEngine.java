@@ -1,7 +1,7 @@
 package com.taller.patrones.infrastructure.combat;
 
-import com.taller.patrones.domain.Attack;
 import com.taller.patrones.domain.Character;
+import com.taller.patrones.domain.attack.Attack;
 
 /**
  * Motor de combate. Calcula daño y crea ataques.

@@ -1,4 +1,4 @@
-package com.taller.patrones.domain;
+package com.taller.patrones.domain.attack;
 
 /**
  * Fabrica de ataques. Encapsula la creación/obtención de objetos Attack.

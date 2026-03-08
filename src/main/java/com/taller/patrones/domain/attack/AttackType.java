@@ -1,10 +1,10 @@
-package com.taller.patrones.domain;
+package com.taller.patrones.domain.attack;
 
-import com.taller.patrones.domain.attack_strategies.CriticalDamageStrategy;
-import com.taller.patrones.domain.attack_strategies.DamageStrategy;
-import com.taller.patrones.domain.attack_strategies.NormalDamageStrategy;
-import com.taller.patrones.domain.attack_strategies.SpecialDamageStrategy;
-import com.taller.patrones.domain.attack_strategies.StatusDamageStrategy;
+import com.taller.patrones.domain.attack.strategies.CriticalDamageStrategy;
+import com.taller.patrones.domain.attack.strategies.DamageStrategy;
+import com.taller.patrones.domain.attack.strategies.NormalDamageStrategy;
+import com.taller.patrones.domain.attack.strategies.SpecialDamageStrategy;
+import com.taller.patrones.domain.attack.strategies.StatusDamageStrategy;
 
 /**
  * Tipos de ataque disponibles.

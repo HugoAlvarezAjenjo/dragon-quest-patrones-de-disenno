@@ -1,4 +1,4 @@
-package com.taller.patrones.domain;
+package com.taller.patrones.domain.attack;
 
 /**
  * Representa un ataque que puede ejecutar un personaje.
