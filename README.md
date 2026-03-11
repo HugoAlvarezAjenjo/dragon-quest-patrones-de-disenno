@@ -103,6 +103,11 @@ Ahora necesitas soportar: equipamiento, buffos temporales, clase (guerrero/mago)
 
 **Pista:** `infrastructure/persistence/BattleRepository.java`
 
+**Solución:** Asumiendo que se va a quitar el static de la clase BattleRepository
+
+- Aplicar el patrón **Singleton** en `BattleRepository` para asegurar que todas las partes de la aplicación compartan el mismo mapa de batallas en memoria.
+- Se ha privatizado el constructor y se accede a la instancia única mediante `BattleRepository.getInstance()`.
+
 ---
 
 ### 5. Recibir datos de un API externo
