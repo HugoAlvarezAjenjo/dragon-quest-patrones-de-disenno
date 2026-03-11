@@ -2,6 +2,7 @@ package com.taller.patrones.application;
 
 import com.taller.patrones.domain.Battle;
 import com.taller.patrones.domain.Character;
+import com.taller.patrones.domain.FighterProvider;
 import com.taller.patrones.domain.attack.Attack;
 import com.taller.patrones.domain.attack.AttackFactory;
 import com.taller.patrones.infrastructure.combat.CombatEngine;
@@ -83,21 +84,13 @@ public class BattleService {
         }
     }
 
-    public BattleStartResult startBattleFromExternal(String fighter1Name, int fighter1Hp, int fighter1Atk,
-            String fighter2Name, int fighter2Hp, int fighter2Atk) {
-        Character player = new Character.Builder(fighter1Name)
-                .maxHp(fighter1Hp)
-                .attack(fighter1Atk)
-                .defense(10)
-                .speed(10)
-                .build();
+    /**
+     * Inicia una batalla desde un origen externo usando el patrón Adapter.
+     */
+    public BattleStartResult startBattleFromExternal(FighterProvider provider) {
+        Character player = provider.getPlayer();
+        Character enemy = provider.getEnemy();
 
-        Character enemy = new Character.Builder(fighter2Name)
-                .maxHp(fighter2Hp)
-                .attack(fighter2Atk)
-                .defense(10)
-                .speed(10)
-                .build();
         Battle battle = new Battle(player, enemy);
         String battleId = UUID.randomUUID().toString();
         battleRepository.save(battleId, battle);

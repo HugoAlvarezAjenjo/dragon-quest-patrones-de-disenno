@@ -123,6 +123,12 @@ Mañana llega otro proveedor con formato distinto: `player.health`, `player.atta
 
 **Pista:** `interfaces/rest/BattleController.java` — método `startBattleFromExternal`
 
+**Solución:**
+
+- Aplicar el patrón **Adapter** para desacoplar el controlador del formato JSON externo.
+- Se ha creado la interfaz `FighterProvider` (Target) y la clase `ExternalFighterAdapter` (Adapter) que encapsula la lógica de mapeo.
+- El `BattleService` ahora acepta cualquier `FighterProvider`, lo que permite soportar nuevos formatos de proveedores externos simplemente creando nuevos adaptadores, sin tocar la lógica de negocio ni el controlador.
+
 ---
 
 ### 6. Notificar cuando ocurre daño

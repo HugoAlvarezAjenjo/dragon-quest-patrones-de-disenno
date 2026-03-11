@@ -3,6 +3,8 @@ package com.taller.patrones.interfaces.rest;
 import com.taller.patrones.application.BattleService;
 import com.taller.patrones.domain.Battle;
 import com.taller.patrones.domain.Character;
+import com.taller.patrones.domain.ExternalFighterAdapter;
+import com.taller.patrones.domain.FighterProvider;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,8 +36,7 @@ public class BattleController {
                 "playerAttacks", BattleService.PLAYER_ATTACKS,
                 "enemyAttacks", BattleService.ENEMY_ATTACKS,
                 "lastDamage", 0,
-                "lastDamageTarget", ""
-        ));
+                "lastDamageTarget", ""));
     }
 
     /**
@@ -45,17 +46,8 @@ public class BattleController {
      */
     @PostMapping("/start/external")
     public ResponseEntity<Map<String, Object>> startBattleFromExternal(@RequestBody Map<String, Object> body) {
-        String fighter1Name = (String) body.getOrDefault("fighter1_name", "Héroe");
-        int fighter1Hp = ((Number) body.getOrDefault("fighter1_hp", 150)).intValue();
-        int fighter1Atk = ((Number) body.getOrDefault("fighter1_atk", 25)).intValue();
-        String fighter2Name = (String) body.getOrDefault("fighter2_name", "Dragón");
-        int fighter2Hp = ((Number) body.getOrDefault("fighter2_hp", 120)).intValue();
-        int fighter2Atk = ((Number) body.getOrDefault("fighter2_atk", 30)).intValue();
-
-        var result = battleService.startBattleFromExternal(
-                fighter1Name, fighter1Hp, fighter1Atk,
-                fighter2Name, fighter2Hp, fighter2Atk
-        );
+        FighterProvider provider = new ExternalFighterAdapter(body);
+        BattleService.BattleStartResult result = battleService.startBattleFromExternal(provider);
         Battle battle = result.battle();
 
         return ResponseEntity.ok(Map.of(
@@ -67,22 +59,23 @@ public class BattleController {
                 "finished", battle.isFinished(),
                 "playerAttacks", BattleService.PLAYER_ATTACKS,
                 "lastDamage", 0,
-                "lastDamageTarget", ""
-        ));
+                "lastDamageTarget", ""));
     }
 
     @GetMapping("/{battleId}")
     public ResponseEntity<Map<String, Object>> getBattle(@PathVariable String battleId) {
         Battle battle = battleService.getBattle(battleId);
-        if (battle == null) return ResponseEntity.notFound().build();
+        if (battle == null)
+            return ResponseEntity.notFound().build();
         return ResponseEntity.ok(toBattleDto(battle));
     }
 
     @PostMapping("/{battleId}/attack")
     public ResponseEntity<Map<String, Object>> attack(@PathVariable String battleId,
-                                                       @RequestBody Map<String, String> body) {
+            @RequestBody Map<String, String> body) {
         Battle battle = battleService.getBattle(battleId);
-        if (battle == null) return ResponseEntity.notFound().build();
+        if (battle == null)
+            return ResponseEntity.notFound().build();
 
         String attackName = body != null && body.get("attack") != null ? body.get("attack") : "TACKLE";
 
@@ -98,7 +91,8 @@ public class BattleController {
     @PostMapping("/{battleId}/enemy-turn")
     public ResponseEntity<Map<String, Object>> enemyTurn(@PathVariable String battleId) {
         Battle battle = battleService.getBattle(battleId);
-        if (battle == null) return ResponseEntity.notFound().build();
+        if (battle == null)
+            return ResponseEntity.notFound().build();
         if (battle.isPlayerTurn() || battle.isFinished()) {
             return ResponseEntity.ok(toBattleDto(battle));
         }
@@ -116,8 +110,7 @@ public class BattleController {
                 "finished", battle.isFinished(),
                 "playerAttacks", BattleService.PLAYER_ATTACKS,
                 "lastDamage", battle.getLastDamage(),
-                "lastDamageTarget", battle.getLastDamageTarget() != null ? battle.getLastDamageTarget() : ""
-        );
+                "lastDamageTarget", battle.getLastDamageTarget() != null ? battle.getLastDamageTarget() : "");
     }
 
     private Map<String, Object> toCharacterDto(Character c) {
@@ -129,7 +122,6 @@ public class BattleController {
                 "attack", c.getAttack(),
                 "defense", c.getDefense(),
                 "speed", c.getSpeed(),
-                "alive", c.isAlive()
-        );
+                "alive", c.isAlive());
     }
 }
