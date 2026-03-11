@@ -1,6 +1,7 @@
 package com.taller.patrones.application;
 
 import com.taller.patrones.domain.Battle;
+import com.taller.patrones.domain.BattleObserver;
 import com.taller.patrones.domain.Character;
 import com.taller.patrones.domain.FighterProvider;
 import com.taller.patrones.domain.attack.Attack;
@@ -8,6 +9,7 @@ import com.taller.patrones.domain.attack.AttackFactory;
 import com.taller.patrones.infrastructure.combat.CombatEngine;
 import com.taller.patrones.infrastructure.persistence.BattleRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,6 +23,11 @@ public class BattleService {
 
     private final CombatEngine combatEngine = new CombatEngine();
     private final BattleRepository battleRepository = BattleRepository.getInstance();
+    private final List<BattleObserver> observers = new ArrayList<>();
+
+    public void addObserver(BattleObserver observer) {
+        observers.add(observer);
+    }
 
     public static final List<String> PLAYER_ATTACKS = List.of("TACKLE", "SLASH", "FIREBALL", "ICE_BEAM", "POISON_STING",
             "THUNDER", "METEORO", "CRITICAL_STRIKE");
@@ -44,7 +51,7 @@ public class BattleService {
         Battle battle = new Battle(player, enemy);
         String battleId = UUID.randomUUID().toString();
         battleRepository.save(battleId, battle);
-
+        this.addObserver(battle);
         return new BattleStartResult(battleId, battle);
     }
 
@@ -76,8 +83,7 @@ public class BattleService {
         defender.takeDamage(damage);
         String target = defender == battle.getPlayer() ? "player" : "enemy";
         battle.setLastDamage(damage, target);
-        battle.log(attacker.getName() + " usa " + attack.getName() + " y hace " + damage + " de daño a "
-                + defender.getName());
+        observers.forEach(observer -> observer.onDamageApplied(attacker, defender, damage, attack));
         battle.switchTurn();
         if (!defender.isAlive()) {
             battle.finish(attacker.getName());

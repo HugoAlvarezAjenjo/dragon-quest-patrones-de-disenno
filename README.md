@@ -147,6 +147,8 @@ Ahora mismo solo existe `battle.log()`. Tendrías que añadir código en `Battle
 
 **Pista:** El método `applyDamage` en `BattleService` es el único que sabe cuándo hay daño.
 
+Se ha usado una lista de subscripciones para avisar a los interesados.
+
 ---
 
 ### 7. Deshacer el último ataque
