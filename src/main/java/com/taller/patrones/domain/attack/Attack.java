@@ -27,4 +27,8 @@ public class Attack {
         return type;
     }
 
+    public int calculateDamage(com.taller.patrones.domain.Character attacker, com.taller.patrones.domain.Character defender) {
+        return this.type.getStrategy().calculate(attacker, defender, this);
+    }
+
 }

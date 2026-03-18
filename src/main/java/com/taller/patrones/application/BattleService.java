@@ -36,7 +36,7 @@ public class BattleService {
     }
 
     public static final List<String> PLAYER_ATTACKS = List.of("TACKLE", "SLASH", "FIREBALL", "ICE_BEAM", "POISON_STING",
-            "THUNDER", "METEORO", "CRITICAL_STRIKE");
+            "THUNDER", "METEORO", "CRITICAL_STRIKE", "COMBO_TRIPLE");
     public static final List<String> ENEMY_ATTACKS = List.of("TACKLE", "SLASH", "FIREBALL");
 
     public BattleStartResult startBattle(String playerName, String enemyName) {

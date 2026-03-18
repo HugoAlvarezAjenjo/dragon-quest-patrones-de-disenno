@@ -205,6 +205,15 @@ Ahora cada ataque es independiente. No hay forma de agrupar varios.
 
 **Pista:** `Attack` es una unidad. ¿Cómo hacer que varios `Attack` se comporten como uno?
 
+**Solución:**
+
+- Aplicar el patrón **Composite**.
+- Creamos una clase `CompositeAttack` que hereda de `Attack` pero contiene una lista de otros ataques.
+- Para que esto funcione de forma transparente, movimos el método `calculateDamage` a la clase `Attack`.
+- El `CompositeAttack` sobreescribe `calculateDamage` sumando los resultados de sus ataques hijos.
+- De esta forma, el resto del sistema (como el `CombatEngine`) trata a un combo exactamente igual que a un ataque básico.
+- Además, lo hemos registrado en el `AttackCatalog` para que se beneficie también del patrón **Flyweight**.
+
 ---
 
 ## Resumen: Patrones del taller

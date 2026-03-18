@@ -14,6 +14,7 @@ public enum AttackCatalog {
     THUNDER(new Attack("Thunder", 90, AttackType.SPECIAL)),
     METEORO(new Attack("Meteoro", 120, AttackType.SPECIAL)),
     CRITICAL_STRIKE(new Attack("Critical Strike", 60, AttackType.CRITICAL)),
+    COMBO_TRIPLE(new CompositeAttack("Triple Combo")),
     DEFAULT(new Attack("Golpe", 30, AttackType.NORMAL));
 
     private final Attack attack;
@@ -40,5 +41,13 @@ public enum AttackCatalog {
         } catch (IllegalArgumentException e) {
             return DEFAULT.getAttack();
         }
+    }
+
+    static {
+        // Inicializar ataques compuestos después de que todos los básicos existan
+        CompositeAttack combo = (CompositeAttack) COMBO_TRIPLE.attack;
+        combo.addAttack(TACKLE.attack);
+        combo.addAttack(SLASH.attack);
+        combo.addAttack(FIREBALL.attack);
     }
 }

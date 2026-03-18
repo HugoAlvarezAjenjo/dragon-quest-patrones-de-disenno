@@ -14,6 +14,6 @@ public class CombatEngine {
      * Patrón Strategy + Enum: delegamos la responsabilidad al tipo de ataque.
      */
     public int calculateDamage(Character attacker, Character defender, Attack attack) {
-        return attack.getType().getStrategy().calculate(attacker, defender, attack);
+        return attack.calculateDamage(attacker, defender);
     }
 }
