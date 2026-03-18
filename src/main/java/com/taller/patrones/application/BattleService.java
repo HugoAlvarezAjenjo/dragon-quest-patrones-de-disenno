@@ -9,8 +9,13 @@ import com.taller.patrones.domain.attack.AttackFactory;
 import com.taller.patrones.infrastructure.combat.CombatEngine;
 import com.taller.patrones.infrastructure.persistence.BattleRepository;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Stack;
 import java.util.UUID;
 
 /**
@@ -24,6 +29,7 @@ public class BattleService {
     private final CombatEngine combatEngine = new CombatEngine();
     private final BattleRepository battleRepository = BattleRepository.getInstance();
     private final List<BattleObserver> observers = new ArrayList<>();
+    private final Deque<BattleCommand> undoStack = new ArrayDeque<>();
 
     public void addObserver(BattleObserver observer) {
         observers.add(observer);
@@ -66,7 +72,7 @@ public class BattleService {
 
         Attack attack = AttackFactory.createAttack(attackName);
         int damage = combatEngine.calculateDamage(battle.getPlayer(), battle.getEnemy(), attack);
-        applyDamage(battle, battle.getPlayer(), battle.getEnemy(), damage, attack);
+        applyDamage(battleId, battle, battle.getPlayer(), battle.getEnemy(), damage, attack);
     }
 
     public void executeEnemyAttack(String battleId, String attackName) {
@@ -76,17 +82,24 @@ public class BattleService {
 
         Attack attack = AttackFactory.createAttack(attackName != null ? attackName : "TACKLE");
         int damage = combatEngine.calculateDamage(battle.getEnemy(), battle.getPlayer(), attack);
-        applyDamage(battle, battle.getEnemy(), battle.getPlayer(), damage, attack);
+        applyDamage(battleId, battle, battle.getEnemy(), battle.getPlayer(), damage, attack);
     }
 
-    private void applyDamage(Battle battle, Character attacker, Character defender, int damage, Attack attack) {
-        defender.takeDamage(damage);
-        String target = defender == battle.getPlayer() ? "player" : "enemy";
-        battle.setLastDamage(damage, target);
+    private void applyDamage(String battleId, Battle battle, Character attacker, Character defender, int damage,
+            Attack attack) {
+        Command command = new AttackCommand(battle, attacker, defender, damage, attack);
+        command.execute();
+
+        history.computeIfAbsent(battleId, k -> new Stack<>()).push(command);
+
         observers.forEach(observer -> observer.onDamageApplied(attacker, defender, damage, attack));
-        battle.switchTurn();
-        if (!defender.isAlive()) {
-            battle.finish(attacker.getName());
+    }
+
+    public void undoLastAttack(String battleId) {
+        Stack<Command> battleHistory = history.get(battleId);
+        if (battleHistory != null && !battleHistory.isEmpty()) {
+            Command lastCommand = battleHistory.pop();
+            lastCommand.undo();
         }
     }
 

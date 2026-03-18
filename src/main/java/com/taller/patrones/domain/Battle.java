@@ -77,6 +77,16 @@ public class Battle implements BattleObserver {
         this.lastDamageTarget = target;
     }
 
+    public void removeLastLog() {
+        if (!battleLog.isEmpty()) {
+            battleLog.remove(battleLog.size() - 1);
+        }
+    }
+
+    public void undoFinish() {
+        this.finished = false;
+    }
+
     @Override
     public void onDamageApplied(Character attacker, Character defender, int damage, Attack attack) {
         this.log(attacker.getName() + " usa " + attack.getName() + " y hace " + damage + " de daño a "

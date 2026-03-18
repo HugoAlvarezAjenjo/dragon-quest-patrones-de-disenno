@@ -49,6 +49,10 @@ public class Character {
         this.currentHp = Math.max(0, currentHp - damage);
     }
 
+    public void restoreHp(int amount) {
+        this.currentHp = Math.min(maxHp, currentHp + amount);
+    }
+
     public boolean isAlive() {
         return currentHp > 0;
     }

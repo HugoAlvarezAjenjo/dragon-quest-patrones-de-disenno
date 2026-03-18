@@ -88,6 +88,16 @@ public class BattleController {
         return ResponseEntity.ok(toBattleDto(battleService.getBattle(battleId)));
     }
 
+    @PostMapping("/{battleId}/undo")
+    public ResponseEntity<Map<String, Object>> undoLastAttack(@PathVariable String battleId) {
+        Battle battle = battleService.getBattle(battleId);
+        if (battle == null)
+            return ResponseEntity.notFound().build();
+            
+        battleService.undoLastAttack(battleId);
+        return ResponseEntity.ok(toBattleDto(battleService.getBattle(battleId)));
+    }
+
     @PostMapping("/{battleId}/enemy-turn")
     public ResponseEntity<Map<String, Object>> enemyTurn(@PathVariable String battleId) {
         Battle battle = battleService.getBattle(battleId);

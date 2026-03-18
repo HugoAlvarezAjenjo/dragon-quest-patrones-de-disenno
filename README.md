@@ -164,6 +164,15 @@ Ahora el ataque se ejecuta directamente en `applyDamage()`. No hay registro de "
 
 **Pista:** La lógica del ataque está en `BattleService.applyDamage()`.
 
+**Solución:**
+
+- Aplicar el patrón **Command** para encapsular cada ataque en un objeto explícito (como `AttackCommand`).
+- El comando implementa una interfaz `Command` con al menos dos métodos: `execute()` y `undo()`.
+- En el `BattleService`, en vez de aplicar el daño directamente, creamos un comando, lo ejecutamos y lo guardamos en una pila o historial (`history`).
+- Cuando el usuario solicita "Deshacer" (ej. llamando al nuevo endpoint `/undo`), sacamos el último comando de la pila y llamamos a su método `undo()`, restaurando así la vida del defensor, retrocediendo el turno y quitando la última entrada del log.
+
+Como alternativa mas chula seria usar memento https://refactoring.guru/design-patterns/memento aunque sea mas pesado de implementar.
+
 ---
 
 ### 8. Simplificar la API del combate

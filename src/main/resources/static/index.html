@@ -434,6 +434,9 @@
             <div class="command-panel">
                 <h3 id="turn-indicator">▶ Tu turno - Elige un ataque:</h3>
                 <div class="attack-grid" id="attack-buttons"></div>
+                <div style="margin-top: 1rem; text-align: right;">
+                    <button id="undo-btn" class="attack-btn" style="background: linear-gradient(180deg, #4a6fa5 0%, #2c3e50 100%); border-color: #5dade2;" onclick="undo()" disabled>⟲ DESHACER</button>
+                </div>
             </div>
 
             <div class="message-box">
@@ -525,6 +528,21 @@
             }
         }
 
+        async function undo() {
+            if (!battleId) return;
+            try {
+                let res = await fetch(API_BASE + `/api/battle/${battleId}/undo`, { method: 'POST' });
+                let data = await res.json();
+                if (data.currentTurn === 'enemy' && !data.finished) {
+                    res = await fetch(API_BASE + `/api/battle/${battleId}/undo`, { method: 'POST' });
+                    data = await res.json();
+                }
+                updateUI(data);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
         function showDamageEffect(data) {
             const damage = data.lastDamage || 0;
             const target = data.lastDamageTarget || '';
@@ -578,6 +596,8 @@
                     `<button class="attack-btn" onclick="attack('${a}')" ${!isPlayerTurn || finished ? 'disabled' : ''}>${formatAttackName(a)}</button>`
                 ).join('');
             }
+
+            document.getElementById('undo-btn').disabled = false;
 
             const logDiv = document.getElementById('battle-log');
             logDiv.innerHTML = (data.battleLog || []).map(msg => `<div class="log-entry">${msg}</div>`).join('');
