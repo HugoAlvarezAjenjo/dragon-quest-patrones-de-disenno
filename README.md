@@ -185,6 +185,12 @@ Como alternativa mas chula seria usar memento https://refactoring.guru/design-pa
 
 **Pista:** Piensa en qué necesita saber un cliente para ejecutar un ataque.
 
+**Solución:**
+
+- Aplicar el patrón **Facade** (en la clase `CombatFacade`).
+- El controlador ya no necesita conocer cómo se calcula el daño, cómo se pasan los turnos o cómo está estructurado el `BattleService`. Simplemente pide "atacar" o "empezar combate" y recibe el estado final.
+- Esto reduce el acoplamiento y hace que el controlador sea mucho más sencillo y fácil de mantener.
+
 ---
 
 ### 9. Ataques compuestos (combo)

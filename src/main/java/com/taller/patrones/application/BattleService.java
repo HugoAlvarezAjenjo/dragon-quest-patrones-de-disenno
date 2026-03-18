@@ -6,12 +6,12 @@ import com.taller.patrones.domain.Character;
 import com.taller.patrones.domain.FighterProvider;
 import com.taller.patrones.domain.attack.Attack;
 import com.taller.patrones.domain.attack.AttackFactory;
+import com.taller.patrones.domain.Command;
+import com.taller.patrones.domain.AttackCommand;
 import com.taller.patrones.infrastructure.combat.CombatEngine;
 import com.taller.patrones.infrastructure.persistence.BattleRepository;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +29,7 @@ public class BattleService {
     private final CombatEngine combatEngine = new CombatEngine();
     private final BattleRepository battleRepository = BattleRepository.getInstance();
     private final List<BattleObserver> observers = new ArrayList<>();
-    private final Deque<BattleCommand> undoStack = new ArrayDeque<>();
+    private final Map<String, Stack<Command>> history = new HashMap<>();
 
     public void addObserver(BattleObserver observer) {
         observers.add(observer);
