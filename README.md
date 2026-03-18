@@ -65,6 +65,8 @@ Además, te piden un nuevo tipo: "CRÍTICO", con fórmula `daño * 1.5` y 20% de
 - El `CombatEngine` se ha simplificado al máximo, delegando el cálculo al tipo de ataque: `attack.getType().getStrategy().calculate(...)`.
 - **Nota sobre STATUS:** El refactor ha revelado un bug oculto: los ataques de estado hacían un daño masivo e ignoraban la defensa. Tras aplicar el patrón, se ha corregido para que hagan 0 de daño directo como se indica en el enunciado (a falta de un sistema de efectos de estado).
 
+Nota: Ya discutimos en clase que esto no es un factoy method pero lo dejo aqui como propuesta mas simple
+
 ---
 
 ### 3. Crear personajes con muchas estadísticas
