@@ -1,22 +1,13 @@
 package com.taller.patrones.application;
 
-import com.taller.patrones.domain.Battle;
-import com.taller.patrones.domain.BattleObserver;
+import com.taller.patrones.domain.*;
 import com.taller.patrones.domain.Character;
-import com.taller.patrones.domain.FighterProvider;
 import com.taller.patrones.domain.attack.Attack;
 import com.taller.patrones.domain.attack.AttackFactory;
-import com.taller.patrones.domain.Command;
-import com.taller.patrones.domain.AttackCommand;
 import com.taller.patrones.infrastructure.combat.CombatEngine;
 import com.taller.patrones.infrastructure.persistence.BattleRepository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Caso de uso: gestionar batallas.
@@ -26,18 +17,17 @@ import java.util.UUID;
  */
 public class BattleService {
 
+    public static final List<String> PLAYER_ATTACKS = List.of("TACKLE", "SLASH", "FIREBALL", "ICE_BEAM", "POISON_STING",
+            "THUNDER", "METEORO", "CRITICAL_STRIKE", "COMBO_TRIPLE");
+    public static final List<String> ENEMY_ATTACKS = List.of("TACKLE", "SLASH", "FIREBALL");
     private final CombatEngine combatEngine = new CombatEngine();
     private final BattleRepository battleRepository = BattleRepository.getInstance();
     private final List<BattleObserver> observers = new ArrayList<>();
-    private final Map<String, Stack<Command>> history = new HashMap<>();
+    private final Map<String, Stack<BattleCommand>> history = new HashMap<>();
 
     public void addObserver(BattleObserver observer) {
         observers.add(observer);
     }
-
-    public static final List<String> PLAYER_ATTACKS = List.of("TACKLE", "SLASH", "FIREBALL", "ICE_BEAM", "POISON_STING",
-            "THUNDER", "METEORO", "CRITICAL_STRIKE", "COMBO_TRIPLE");
-    public static final List<String> ENEMY_ATTACKS = List.of("TACKLE", "SLASH", "FIREBALL");
 
     public BattleStartResult startBattle(String playerName, String enemyName) {
         Character player = new Character.Builder(playerName != null ? playerName : "Héroe")
@@ -86,27 +76,27 @@ public class BattleService {
     }
 
     private void applyDamage(String battleId, Battle battle, Character attacker, Character defender, int damage,
-            Attack attack) {
-        Command command = new AttackCommand(battle, attacker, defender, damage, attack);
-        command.execute();
+                             Attack attack) {
+        BattleCommand battleCommand = new AttackBattleCommand(battle, attacker, defender, damage, attack);
+        battleCommand.execute();
 
-        history.computeIfAbsent(battleId, k -> new Stack<>()).push(command);
+        history.computeIfAbsent(battleId, k -> new Stack<>()).push(battleCommand);
 
         observers.forEach(observer -> observer.onDamageApplied(attacker, defender, damage, attack));
     }
 
     public void undoLastAttack(String battleId) {
-        Stack<Command> battleHistory = history.get(battleId);
+        Stack<BattleCommand> battleHistory = history.get(battleId);
         if (battleHistory != null && !battleHistory.isEmpty()) {
-            Command lastCommand = battleHistory.pop();
-            lastCommand.undo();
+            BattleCommand lastBattleCommand = battleHistory.pop();
+            lastBattleCommand.undo();
         }
     }
 
     /**
      * Inicia una batalla desde un origen externo usando el patrón Adapter.
      */
-    public BattleStartResult startBattleFromExternal(FighterProvider provider) {
+    public BattleStartResult startBattleFromExternal(CharacterMap provider) {
         Character player = provider.getPlayer();
         Character enemy = provider.getEnemy();
 

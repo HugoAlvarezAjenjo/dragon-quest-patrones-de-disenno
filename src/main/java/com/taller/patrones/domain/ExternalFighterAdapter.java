@@ -4,9 +4,11 @@ import java.util.Map;
 
 /**
  * Clase Adapter que envuelve un Map (JSON externo) y lo adapta
- * a la interfaz FighterProvider esperada por el dominio.
+ * a la interfaz CharacterMap esperada por el dominio.
+ * <p>
+ * Bien la idea
  */
-public class ExternalFighterAdapter implements FighterProvider {
+public class ExternalFighterAdapter implements CharacterMap {
 
     private final Map<String, Object> externalData;
 
@@ -20,7 +22,8 @@ public class ExternalFighterAdapter implements FighterProvider {
         int hp = ((Number) externalData.getOrDefault("fighter1_hp", 150)).intValue();
         int atk = ((Number) externalData.getOrDefault("fighter1_atk", 25)).intValue();
 
-        return new Character.Builder(name)
+        return new Character.Builder(
+                name) // EL builder no necesita recibir ningún parámetro al llamarlo, pierdes el sentido y la legibilidad
                 .maxHp(hp)
                 .attack(atk)
                 .defense(10)

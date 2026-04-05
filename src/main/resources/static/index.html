@@ -2,11 +2,12 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Dragon Quest - Combat Simulator</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=MedievalSharp&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=MedievalSharp&display=swap"
+          rel="stylesheet">
     <style>
         :root {
             --dq-gold: #c9a227;
@@ -283,7 +284,7 @@
 
         .hp-text { font-size: 0.75rem; margin-top: 0.25rem; color: var(--dq-cream-dark); }
 
-        .command-panel {
+        .battleCommand-panel {
             background: linear-gradient(180deg, var(--dq-brown-light) 0%, var(--dq-brown) 100%);
             border: 4px solid var(--dq-gold);
             padding: 1.25rem;
@@ -292,7 +293,7 @@
             animation: fadeIn 0.5s ease 0.3s both;
         }
 
-        .command-panel h3 {
+        .battleCommand-panel h3 {
             font-family: 'Cinzel', serif;
             font-size: 0.95rem;
             color: var(--dq-gold);
@@ -385,228 +386,231 @@
     </style>
 </head>
 <body>
-    <div class="battle-bg" id="battle-bg"></div>
+<div class="battle-bg" id="battle-bg"></div>
 
-    <div class="container">
-        <header>
-            <div class="title-frame">
-                <h1>⚔ DRAGON QUEST ⚔</h1>
-                <p class="subtitle">Combat Simulator · Taller Patrones de Diseño</p>
-            </div>
-        </header>
-
-        <div id="start-screen">
-            <button class="start-btn" onclick="startBattle()">▶ INICIAR BATALLA</button>
+<div class="container">
+    <header>
+        <div class="title-frame">
+            <h1>⚔ DRAGON QUEST ⚔</h1>
+            <p class="subtitle">Combat Simulator · Taller Patrones de Diseño</p>
         </div>
+    </header>
 
-        <div id="battle-screen" style="display: none;">
-            <div class="battle-scene">
-                <div class="battle-arena">
-                    <div class="fighter-side player" id="player-side">
-                        <div class="fighter-sprite" id="player-sprite">
-                            <img src="/images/player.png" alt="Héroe" onerror="handleImgError(this, '/images/player.jpg')">
-                            <span class="emoji-fallback" style="display:none">🧙</span>
-                        </div>
-                        <div class="fighter-name" id="player-name">Héroe</div>
-                        <div class="hp-container">
-                            <div class="hp-bar-outer">
-                                <div class="hp-bar-inner" id="player-hp-bar" style="width: 100%"></div>
-                            </div>
-                            <div class="hp-text" id="player-hp-text">150 / 150</div>
-                        </div>
-                    </div>
-                    <div class="fighter-side enemy" id="enemy-side">
-                        <div class="fighter-sprite" id="enemy-sprite">
-                            <img src="/images/enemy.png" alt="Dragón" onerror="handleImgError(this, '/images/enemy.jpg')">
-                            <span class="emoji-fallback" style="display:none">🐉</span>
-                        </div>
-                        <div class="fighter-name" id="enemy-name">Dragón</div>
-                        <div class="hp-container">
-                            <div class="hp-bar-outer">
-                                <div class="hp-bar-inner" id="enemy-hp-bar" style="width: 100%"></div>
-                            </div>
-                            <div class="hp-text" id="enemy-hp-text">120 / 120</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="command-panel">
-                <h3 id="turn-indicator">▶ Tu turno - Elige un ataque:</h3>
-                <div class="attack-grid" id="attack-buttons"></div>
-                <div style="margin-top: 1rem; text-align: right;">
-                    <button id="undo-btn" class="attack-btn" style="background: linear-gradient(180deg, #4a6fa5 0%, #2c3e50 100%); border-color: #5dade2;" onclick="undo()" disabled>⟲ DESHACER</button>
-                </div>
-            </div>
-
-            <div class="message-box">
-                <h3>◆ Mensajes de batalla</h3>
-                <div id="battle-log"></div>
-            </div>
-        </div>
+    <div id="start-screen">
+        <button class="start-btn" onclick="startBattle()">▶ INICIAR BATALLA</button>
     </div>
 
-    <script>
-        let battleId = null;
-        const API_BASE = window.location.origin;
+    <div id="battle-screen" style="display: none;">
+        <div class="battle-scene">
+            <div class="battle-arena">
+                <div class="fighter-side player" id="player-side">
+                    <div class="fighter-sprite" id="player-sprite">
+                        <img alt="Héroe" onerror="handleImgError(this, '/images/player.jpg')" src="/images/player.png">
+                        <span class="emoji-fallback" style="display:none">🧙</span>
+                    </div>
+                    <div class="fighter-name" id="player-name">Héroe</div>
+                    <div class="hp-container">
+                        <div class="hp-bar-outer">
+                            <div class="hp-bar-inner" id="player-hp-bar" style="width: 100%"></div>
+                        </div>
+                        <div class="hp-text" id="player-hp-text">150 / 150</div>
+                    </div>
+                </div>
+                <div class="fighter-side enemy" id="enemy-side">
+                    <div class="fighter-sprite" id="enemy-sprite">
+                        <img alt="Dragón" onerror="handleImgError(this, '/images/enemy.jpg')" src="/images/enemy.png">
+                        <span class="emoji-fallback" style="display:none">🐉</span>
+                    </div>
+                    <div class="fighter-name" id="enemy-name">Dragón</div>
+                    <div class="hp-container">
+                        <div class="hp-bar-outer">
+                            <div class="hp-bar-inner" id="enemy-hp-bar" style="width: 100%"></div>
+                        </div>
+                        <div class="hp-text" id="enemy-hp-text">120 / 120</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        function handleImgError(img, fallbackSrc) {
-            if (img.dataset.tried) {
-                img.style.display = 'none';
-                img.nextElementSibling.style.display = 'block';
-            } else {
-                img.dataset.tried = '1';
-                img.src = fallbackSrc;
-            }
+        <div class="battleCommand-panel">
+            <h3 id="turn-indicator">▶ Tu turno - Elige un ataque:</h3>
+            <div class="attack-grid" id="attack-buttons"></div>
+            <div style="margin-top: 1rem; text-align: right;">
+                <button class="attack-btn" disabled
+                        id="undo-btn"
+                        onclick="undo()" style="background: linear-gradient(180deg, #4a6fa5 0%, #2c3e50 100%); border-color: #5dade2;">⟲ DESHACER
+                </button>
+            </div>
+        </div>
+
+        <div class="message-box">
+            <h3>◆ Mensajes de batalla</h3>
+            <div id="battle-log"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let battleId = null;
+    const API_BASE = window.location.origin;
+
+    function handleImgError(img, fallbackSrc) {
+        if (img.dataset.tried) {
+            img.style.display = 'none';
+            img.nextElementSibling.style.display = 'block';
+        } else {
+            img.dataset.tried = '1';
+            img.src = fallbackSrc;
         }
+    }
 
-        // Cargar fondo de batalla (prueba .jpg y .png)
-        (function loadBackground() {
-            const bg = document.getElementById('battle-bg');
-            ['/images/background.jpg', '/images/background.png'].forEach(src => {
-                const img = new Image();
-                img.onload = () => { bg.style.backgroundImage = 'url(' + src + ')'; bg.classList.add('has-image'); };
-                img.src = src;
+    // Cargar fondo de batalla (prueba .jpg y .png)
+    (function loadBackground() {
+        const bg = document.getElementById('battle-bg');
+        ['/images/background.jpg', '/images/background.png'].forEach(src => {
+            const img = new Image();
+            img.onload = () => { bg.style.backgroundImage = 'url(' + src + ')'; bg.classList.add('has-image'); };
+            img.src = src;
+        });
+    })();
+
+    async function startBattle() {
+        try {
+            const res = await fetch(API_BASE + '/api/battle/start', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ playerName: 'Héroe', enemyName: 'Dragón' })
             });
-        })();
+            const data = await res.json();
+            battleId = data.battleId;
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('battle-screen').style.display = 'block';
+            updateUI(data);
+        } catch (e) {
+            console.error(e);
+            alert('Error al iniciar batalla. ¿Está el servidor corriendo en http://localhost:8080?');
+        }
+    }
 
-        async function startBattle() {
-            try {
-                const res = await fetch(API_BASE + '/api/battle/start', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ playerName: 'Héroe', enemyName: 'Dragón' })
-                });
-                const data = await res.json();
-                battleId = data.battleId;
-                document.getElementById('start-screen').style.display = 'none';
-                document.getElementById('battle-screen').style.display = 'block';
-                updateUI(data);
-            } catch (e) {
-                console.error(e);
-                alert('Error al iniciar batalla. ¿Está el servidor corriendo en http://localhost:8080?');
+    async function attack(attackName) {
+        if (!battleId) return;
+        const isPlayerTurn = document.getElementById('player-side').classList.contains('active-turn');
+        if (isPlayerTurn) {
+            document.getElementById('player-side').classList.add('attacking');
+            setTimeout(() => document.getElementById('player-side').classList.remove('attacking'), 400);
+        }
+        try {
+            const res = await fetch(API_BASE + `/api/battle/${battleId}/attack`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ attack: attackName })
+            });
+            const data = await res.json();
+            showDamageEffect(data);
+            updateUI(data);
+            if (!data.finished && data.currentTurn === 'enemy') {
+                setTimeout(enemyTurn, 1200);
             }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function enemyTurn() {
+        document.getElementById('enemy-side').classList.add('attacking');
+        setTimeout(() => document.getElementById('enemy-side').classList.remove('attacking'), 400);
+        try {
+            const res = await fetch(API_BASE + `/api/battle/${battleId}/enemy-turn`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await res.json();
+            showDamageEffect(data);
+            updateUI(data);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function undo() {
+        if (!battleId) return;
+        try {
+            let res = await fetch(API_BASE + `/api/battle/${battleId}/undo`, { method: 'POST' });
+            let data = await res.json();
+            if (data.currentTurn === 'enemy' && !data.finished) {
+                res = await fetch(API_BASE + `/api/battle/${battleId}/undo`, { method: 'POST' });
+                data = await res.json();
+            }
+            updateUI(data);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function showDamageEffect(data) {
+        const damage = data.lastDamage || 0;
+        const target = data.lastDamageTarget || '';
+        if (damage <= 0) return;
+
+        const targetEl = target === 'player' ? document.getElementById('player-side') : document.getElementById('enemy-side');
+        const spriteEl = targetEl.querySelector('.fighter-sprite');
+        targetEl.classList.add('shake');
+        setTimeout(() => targetEl.classList.remove('shake'), 500);
+
+        const popup = document.createElement('div');
+        popup.className = 'damage-popup';
+        popup.textContent = '-' + damage;
+        popup.style.left = '50%';
+        popup.style.top = '50%';
+        popup.style.transform = 'translate(-50%, -50%)';
+        spriteEl.style.position = 'relative';
+        spriteEl.appendChild(popup);
+        setTimeout(() => popup.remove(), 1000);
+    }
+
+    function updateUI(data) {
+        const player = data.player;
+        const enemy = data.enemy;
+        const isPlayerTurn = data.currentTurn === 'player';
+        const finished = data.finished;
+
+        document.getElementById('player-name').textContent = player.name;
+        document.getElementById('player-hp-bar').style.width = player.hpPercentage + '%';
+        document.getElementById('player-hp-bar').classList.toggle('low', player.hpPercentage < 25);
+        document.getElementById('player-hp-text').textContent = player.currentHp + ' / ' + player.maxHp;
+
+        document.getElementById('enemy-name').textContent = enemy.name;
+        document.getElementById('enemy-hp-bar').style.width = enemy.hpPercentage + '%';
+        document.getElementById('enemy-hp-bar').classList.toggle('low', enemy.hpPercentage < 25);
+        document.getElementById('enemy-hp-text').textContent = enemy.currentHp + ' / ' + enemy.maxHp;
+
+        document.getElementById('player-side').classList.toggle('active-turn', isPlayerTurn && !finished);
+        document.getElementById('enemy-side').classList.toggle('active-turn', !isPlayerTurn && !finished);
+
+        const turnIndicator = document.getElementById('turn-indicator');
+        if (finished) {
+            turnIndicator.innerHTML = '<span class="game-over">🏆 ' + data.battleLog[data.battleLog.length - 1] + '</span>';
+        } else {
+            turnIndicator.textContent = isPlayerTurn ? '▶ Tu turno - Elige un ataque:' : '◆ Turno del enemigo...';
         }
 
-        async function attack(attackName) {
-            if (!battleId) return;
-            const isPlayerTurn = document.getElementById('player-side').classList.contains('active-turn');
-            if (isPlayerTurn) {
-                document.getElementById('player-side').classList.add('attacking');
-                setTimeout(() => document.getElementById('player-side').classList.remove('attacking'), 400);
-            }
-            try {
-                const res = await fetch(API_BASE + `/api/battle/${battleId}/attack`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ attack: attackName })
-                });
-                const data = await res.json();
-                showDamageEffect(data);
-                updateUI(data);
-                if (!data.finished && data.currentTurn === 'enemy') {
-                    setTimeout(enemyTurn, 1200);
-                }
-            } catch (e) {
-                console.error(e);
-            }
+        const attackButtons = document.getElementById('attack-buttons');
+        if (data.playerAttacks) {
+            attackButtons.innerHTML = data.playerAttacks.map(a =>
+                `<button class="attack-btn" onclick="attack('${a}')" ${!isPlayerTurn || finished ? 'disabled' : ''}>${formatAttackName(a)}</button>`
+            ).join('');
         }
 
-        async function enemyTurn() {
-            document.getElementById('enemy-side').classList.add('attacking');
-            setTimeout(() => document.getElementById('enemy-side').classList.remove('attacking'), 400);
-            try {
-                const res = await fetch(API_BASE + `/api/battle/${battleId}/enemy-turn`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                const data = await res.json();
-                showDamageEffect(data);
-                updateUI(data);
-            } catch (e) {
-                console.error(e);
-            }
-        }
+        document.getElementById('undo-btn').disabled = false;
 
-        async function undo() {
-            if (!battleId) return;
-            try {
-                let res = await fetch(API_BASE + `/api/battle/${battleId}/undo`, { method: 'POST' });
-                let data = await res.json();
-                if (data.currentTurn === 'enemy' && !data.finished) {
-                    res = await fetch(API_BASE + `/api/battle/${battleId}/undo`, { method: 'POST' });
-                    data = await res.json();
-                }
-                updateUI(data);
-            } catch (e) {
-                console.error(e);
-            }
-        }
+        const logDiv = document.getElementById('battle-log');
+        logDiv.innerHTML = (data.battleLog || []).map(msg => `<div class="log-entry">${msg}</div>`).join('');
+        logDiv.parentElement.scrollTop = logDiv.parentElement.scrollHeight;
+    }
 
-        function showDamageEffect(data) {
-            const damage = data.lastDamage || 0;
-            const target = data.lastDamageTarget || '';
-            if (damage <= 0) return;
-
-            const targetEl = target === 'player' ? document.getElementById('player-side') : document.getElementById('enemy-side');
-            const spriteEl = targetEl.querySelector('.fighter-sprite');
-            targetEl.classList.add('shake');
-            setTimeout(() => targetEl.classList.remove('shake'), 500);
-
-            const popup = document.createElement('div');
-            popup.className = 'damage-popup';
-            popup.textContent = '-' + damage;
-            popup.style.left = '50%';
-            popup.style.top = '50%';
-            popup.style.transform = 'translate(-50%, -50%)';
-            spriteEl.style.position = 'relative';
-            spriteEl.appendChild(popup);
-            setTimeout(() => popup.remove(), 1000);
-        }
-
-        function updateUI(data) {
-            const player = data.player;
-            const enemy = data.enemy;
-            const isPlayerTurn = data.currentTurn === 'player';
-            const finished = data.finished;
-
-            document.getElementById('player-name').textContent = player.name;
-            document.getElementById('player-hp-bar').style.width = player.hpPercentage + '%';
-            document.getElementById('player-hp-bar').classList.toggle('low', player.hpPercentage < 25);
-            document.getElementById('player-hp-text').textContent = player.currentHp + ' / ' + player.maxHp;
-
-            document.getElementById('enemy-name').textContent = enemy.name;
-            document.getElementById('enemy-hp-bar').style.width = enemy.hpPercentage + '%';
-            document.getElementById('enemy-hp-bar').classList.toggle('low', enemy.hpPercentage < 25);
-            document.getElementById('enemy-hp-text').textContent = enemy.currentHp + ' / ' + enemy.maxHp;
-
-            document.getElementById('player-side').classList.toggle('active-turn', isPlayerTurn && !finished);
-            document.getElementById('enemy-side').classList.toggle('active-turn', !isPlayerTurn && !finished);
-
-            const turnIndicator = document.getElementById('turn-indicator');
-            if (finished) {
-                turnIndicator.innerHTML = '<span class="game-over">🏆 ' + data.battleLog[data.battleLog.length - 1] + '</span>';
-            } else {
-                turnIndicator.textContent = isPlayerTurn ? '▶ Tu turno - Elige un ataque:' : '◆ Turno del enemigo...';
-            }
-
-            const attackButtons = document.getElementById('attack-buttons');
-            if (data.playerAttacks) {
-                attackButtons.innerHTML = data.playerAttacks.map(a =>
-                    `<button class="attack-btn" onclick="attack('${a}')" ${!isPlayerTurn || finished ? 'disabled' : ''}>${formatAttackName(a)}</button>`
-                ).join('');
-            }
-
-            document.getElementById('undo-btn').disabled = false;
-
-            const logDiv = document.getElementById('battle-log');
-            logDiv.innerHTML = (data.battleLog || []).map(msg => `<div class="log-entry">${msg}</div>`).join('');
-            logDiv.parentElement.scrollTop = logDiv.parentElement.scrollHeight;
-        }
-
-        function formatAttackName(name) {
-            return name.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
-        }
-    </script>
+    function formatAttackName(name) {
+        return name.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+    }
+</script>
 </body>
 </html>

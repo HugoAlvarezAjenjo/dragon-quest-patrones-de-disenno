@@ -1,19 +1,23 @@
 package com.taller.patrones.domain;
 
+import com.taller.patrones.domain.attack.Attack;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.taller.patrones.domain.attack.Attack;
 
 /**
  * Representa una batalla entre dos personajes.
  */
-public class Battle implements BattleObserver {
+public class Battle implements
+        BattleObserver//La idea del observer es hacer clases aparte que se suscriban y ya se notifieu, no que una clase que
+//tienes, que ya tiene responsabilidades, le metas otra responsabilidad
+        //Revisa esto: https://github.com/AnaGciaSchz/dragon-quest-patrones/blob/solucion-ana/src/main/java/com/taller/patrones/domain/BattleEventListener.java
+{
 
     private final Character player;
     private final Character enemy;
-    private String currentTurn;
     private final List<String> battleLog;
+    private String currentTurn;
     private boolean finished;
     private int lastDamage;
     private String lastDamageTarget;
