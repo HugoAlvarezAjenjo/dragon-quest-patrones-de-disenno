@@ -17,19 +17,25 @@ public enum AttackCatalog {
     COMBO_TRIPLE(new CompositeAttack("Triple Combo")),
     DEFAULT(new Attack("Golpe", 30, AttackType.NORMAL));
 
+    static {
+        // Inicializar ataques compuestos después de que todos los básicos existan
+        CompositeAttack combo = (CompositeAttack) COMBO_TRIPLE.attack;
+        combo.addAttack(TACKLE.attack);
+        combo.addAttack(SLASH.attack);
+        combo.addAttack(
+                FIREBALL.attack); //Esto lo podrías hacer dentro de una factory, por qué has usado un enum por el medio?
+        // COnsideras que esto se entiende y es igual de intuotivo que un factory?
+    }
+
     private final Attack attack;
 
     AttackCatalog(Attack attack) {
         this.attack = attack;
     }
 
-    public Attack getAttack() {
-        return attack;
-    }
-
     /**
      * Busca un ataque por su nombre y devuelve la instancia compartida.
-     * 
+     *
      * @param name Nombre del ataque.
      * @return La instancia de Attack (Flyweight).
      */
@@ -43,11 +49,7 @@ public enum AttackCatalog {
         }
     }
 
-    static {
-        // Inicializar ataques compuestos después de que todos los básicos existan
-        CompositeAttack combo = (CompositeAttack) COMBO_TRIPLE.attack;
-        combo.addAttack(TACKLE.attack);
-        combo.addAttack(SLASH.attack);
-        combo.addAttack(FIREBALL.attack);
+    public Attack getAttack() {
+        return attack;
     }
 }

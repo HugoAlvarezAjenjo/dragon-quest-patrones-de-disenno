@@ -2,7 +2,7 @@ package com.taller.patrones.application;
 
 import com.taller.patrones.domain.Battle;
 import com.taller.patrones.domain.Character;
-import com.taller.patrones.domain.FighterProvider;
+import com.taller.patrones.domain.CharacterMap;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +20,7 @@ public class CombatFacade {
         return toBattleStatusMap(result.battleId(), result.battle(), true);
     }
 
-    public Map<String, Object> startBattleFromExternal(FighterProvider provider) {
+    public Map<String, Object> startBattleFromExternal(CharacterMap provider) {
         var result = battleService.startBattleFromExternal(provider);
         return toBattleStatusMap(result.battleId(), result.battle(), true);
     }
@@ -46,7 +46,7 @@ public class CombatFacade {
     public Map<String, Object> undo(String battleId) {
         Battle battle = battleService.getBattle(battleId);
         if (battle == null) return null;
-        
+
         battleService.undoLastAttack(battleId);
         return toBattleDto(battle);
     }

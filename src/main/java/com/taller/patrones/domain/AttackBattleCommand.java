@@ -5,7 +5,7 @@ import com.taller.patrones.domain.attack.Attack;
 /**
  * Comando concreto para ejecutar y deshacer un ataque.
  */
-public class AttackCommand implements Command {
+public class AttackBattleCommand implements BattleCommand {
     private final Battle battle;
     private final Character attacker;
     private final Character defender;
@@ -13,7 +13,7 @@ public class AttackCommand implements Command {
     private final Attack attack;
     private final boolean fatal;
 
-    public AttackCommand(Battle battle, Character attacker, Character defender, int damage, Attack attack) {
+    public AttackBattleCommand(Battle battle, Character attacker, Character defender, int damage, Attack attack) {
         this.battle = battle;
         this.attacker = attacker;
         this.defender = defender;

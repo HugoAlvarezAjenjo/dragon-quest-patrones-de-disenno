@@ -13,6 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class BattleRepository {
     private static final BattleRepository instance = new BattleRepository();
+            // Mejor usar el método getInstance, por transparencia,
+    // comunicación y facilidad, por ejemplo, a la hora de hacer tests.
     private final Map<String, Battle> battles = new ConcurrentHashMap<>();
 
     private BattleRepository() {

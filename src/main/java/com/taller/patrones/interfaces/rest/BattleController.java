@@ -1,8 +1,8 @@
 package com.taller.patrones.interfaces.rest;
 
 import com.taller.patrones.application.CombatFacade;
+import com.taller.patrones.domain.CharacterMap;
 import com.taller.patrones.domain.ExternalFighterAdapter;
-import com.taller.patrones.domain.FighterProvider;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +25,7 @@ public class BattleController {
 
     @PostMapping("/start/external")
     public ResponseEntity<Map<String, Object>> startBattleFromExternal(@RequestBody Map<String, Object> body) {
-        FighterProvider provider = new ExternalFighterAdapter(body);
+        CharacterMap provider = new ExternalFighterAdapter(body);
         return ResponseEntity.ok(combatFacade.startBattleFromExternal(provider));
     }
 
@@ -37,13 +37,14 @@ public class BattleController {
 
     @PostMapping("/{battleId}/attack")
     public ResponseEntity<Map<String, Object>> attack(@PathVariable String battleId,
-            @RequestBody Map<String, String> body) {
+                                                      @RequestBody Map<String, String> body) {
         String attackName = body != null && body.get("attack") != null ? body.get("attack") : "TACKLE";
         Map<String, Object> status = combatFacade.attack(battleId, attackName);
         return status != null ? ResponseEntity.ok(status) : ResponseEntity.notFound().build();
     }
 
     @PostMapping("/{battleId}/undo")
+    //Esto debería ser un GET. ¿qué información necesitas que te manden en el body? Ninguna
     public ResponseEntity<Map<String, Object>> undoLastAttack(@PathVariable String battleId) {
         Map<String, Object> status = combatFacade.undo(battleId);
         return status != null ? ResponseEntity.ok(status) : ResponseEntity.notFound().build();
